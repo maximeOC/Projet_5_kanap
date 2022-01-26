@@ -1,5 +1,5 @@
 const uuid = require('uuid/v1');
-const Product = require('../models/ProductMo');
+const Product = require('../models/Product');
 
 exports.getAllProducts = (req, res, next) => {
   Product.find().then(
