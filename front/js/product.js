@@ -41,10 +41,18 @@ function getPost(kanapData) {
   for (let colors of kanapData.colors) {
     let kanapColors = document.querySelector("#colors");
     kanapColors.innerHTML += `<option value="${colors}"> ${colors}</option>`;
-
-    console.log(kanapColors);
   }
 }
 
 const idForm = document.querySelector("#colors");
 console.log(idForm);
+
+let btn_ajoutPanier = document.getElementById("addToCart");
+btn_ajoutPanier.addEventListener("click", () => {
+  let color = document.getElementById("colors");
+  let quantity = document.getElementById("quantity");
+  let price = document.getElementById("price");
+  let title = document.getElementById("title");
+
+  console.log();
+});
