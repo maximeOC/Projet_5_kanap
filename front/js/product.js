@@ -42,17 +42,55 @@ function getPost(kanapData) {
     let kanapColors = document.querySelector("#colors");
     kanapColors.innerHTML += `<option value="${colors}"> ${colors}</option>`;
   }
+  panier(kanapData);
 }
 
-const idForm = document.querySelector("#colors");
-console.log(idForm);
+//ajout lien pour la page panier
 
 let btn_ajoutPanier = document.getElementById("addToCart");
-btn_ajoutPanier.addEventListener("click", () => {
-  let color = document.getElementById("colors");
-  let quantity = document.getElementById("quantity");
-  let price = document.getElementById("price");
-  let title = document.getElementById("title");
 
-  console.log();
+btn_ajoutPanier.addEventListener("click", (e) => {
+  e.preventDefault();
+  let color = document.getElementById("colors").value;
+  let quantity = Number(document.getElementById("quantity").value);
+  // récuperation des choix du cient
+  let choixDuClient = {
+    idProduct: kanapData._id,
+    nameProduct: kanapData.name,
+    colorProduct: color,
+    quantityProduct: quantity,
+    priceProduct: kanapData.price,
+    imageProduct: kanapData.imageUrl,
+    altProduct: kanapData.altTxt,
+    description: kanapData.description,
+  };
+  console.log(choixDuClient);
+  // déclaration de variables, JSON.parse permet de convertir des données JSON en format javascript
+  let addProduit = JSON.parse(localStorage.getItem("produitKanap"));
+
+  if (addProduit) {
+    addProduit.push(choixDuClient);
+    localStorage.setItem("produitKanap", JSON.stringify(addProduit));
+    console.log(addProduit);
+  } else {
+    addProduit = [];
+    addProduit.push(choixDuClient);
+    localStorage.setItem("produitKanap", JSON.stringify(addProduit));
+
+    console.log(addProduit);
+  }
+  if (!color) {
+    alert("veuillez ajouter une couleur");
+    return;
+  }
+
+  if (quantity > 0 && quantity <= 100) {
+  } else {
+    alert("veuillez ajouter un nombre d'article");
+  }
+  document.querySelector(".item__content__addButton").innerHTML = `
+  <a href="../html/cart.html">
+  <button id="addToCart">Ajouter au panier</button>
+  </a>
+  `;
 });
