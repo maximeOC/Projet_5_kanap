@@ -68,6 +68,7 @@ btn_ajoutPanier.addEventListener("click", (e) => {
   // déclaration de variables, JSON.parse permet de convertir des données JSON en format javascript
   let addProduit = JSON.parse(localStorage.getItem("produitKanap"));
 
+  // envoie des produits dans le localstorage
   if (addProduit) {
     addProduit.push(choixDuClient);
     localStorage.setItem("produitKanap", JSON.stringify(addProduit));
@@ -79,15 +80,18 @@ btn_ajoutPanier.addEventListener("click", (e) => {
 
     console.log(addProduit);
   }
+
+  // une alerte se crée si le client n'a pas choisi de couleur
   if (!color) {
     alert("veuillez ajouter une couleur");
     return;
   }
-
-  if (quantity > 0 && quantity <= 100) {
+  // une alerte se crée si le client n'a pas choisi de quantité
+  if (!quantity > 0 && quantity <= 100) {
   } else {
     alert("veuillez ajouter un nombre d'article");
   }
+  //ajout du lien pour accéder au panier
   document.querySelector(".item__content__addButton").innerHTML = `
   <a href="../html/cart.html">
   <button id="addToCart">Ajouter au panier</button>

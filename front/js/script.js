@@ -6,6 +6,8 @@ const fetchKanap = async () => {
     .then((response2) => (itemData = response2));
 };
 
+//ajout des produits de kanap
+
 const kanapDisplay = async () => {
   await fetchKanap();
   document.getElementById("items").innerHTML = itemData
