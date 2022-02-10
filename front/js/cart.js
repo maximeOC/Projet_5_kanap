@@ -1,4 +1,4 @@
-let addProduit = JSON.parse(localStorage.getItem("produitKanap"));
+let addProduit = JSON.parse(localStorage.getItem("kanap"));
 
 function basketKanap() {
   for (let a = 0; a < addProduit.length; a++)
@@ -29,69 +29,33 @@ function basketKanap() {
 
 basketKanap();
 
-// calcul prix total
+function panierTotalArticles() {
+  let quantityTotalPanier = 0;
+  for (let m = 0; m < addProduit.length; m++) {
+    quantityTotalPanier += Number(addProduit[m].quantityProduct);
+  }
+  document.getElementById("totalQuantity").innerHTML = quantityTotalPanier;
+}
+panierTotalArticles();
 
-let prixTotal = [];
-let quantityTotalPanier = [];
-
-for (let m = 0; m < addProduit.length; m++) {
-  let prixDansLePanier = addProduit[m].priceProduct;
-  prixTotal.push(prixDansLePanier);
-
-  console.log(prixTotal);
+function panierTotalPrix() {
+  let prixTotal = [];
+  for (let n = 0; n < addProduit.length; n++) {
+    let prixDansLePanier =
+      addProduit[n].priceProduct * addProduit[n].quantityProduct;
+    prixTotal.push(prixDansLePanier);
+  }
+  const reducer = (accumulator, cur) => accumulator + cur;
+  const prixTotalCalcul = prixTotal.reduce(reducer, 0);
+  document.getElementById("totalPrice").innerHTML = prixTotalCalcul;
 }
 
-//addition du panier
-const reducer = (accumulator, cur) => accumulator + cur;
-const prixTotalCalcul = prixTotal.reduce(reducer);
-
-console.log(prixTotalCalcul);
-
-//injection variable dans le code html
-
-let prixTotaux = (document.getElementById(
-  "totalPrice"
-).innerHTML = `${prixTotalCalcul}`);
-
-//ajout quantité total
-
-for (let y = 0; y < addProduit.length; y++) {
-  let quantiteDansLePanier = addProduit[y].quantityProduct;
-  quantityTotalPanier.push(quantiteDansLePanier);
-
-  console.log(quantiteDansLePanier);
-}
-
-// constante pour cumuler les quantités
-const reduceQuan = (accumulator, cur) => accumulator + cur;
-const quantiteTotalCalcul = quantityTotalPanier.reduce(reduceQuan);
-
-console.log(quantiteTotalCalcul);
-
-let quantiteTotaux = (document.getElementById(
-  "totalQuantity"
-).innerHTML = `${quantiteTotalCalcul}`);
+panierTotalPrix();
 
 //bouton supprimé
 
-/*function deleteProduct() {
-  let addProduit = JSON.parse(localStorage.getItem("produitKanap"));
-  let btnSupp = document.querySelectorAll(".deleteItem");
-  console.log(btnSupp);
-
-  for (let w = 0; w < btnSupp.length; w++) {
-    btnSupp[w].addEventListener("click", (event) => {
-      event.preventDefault();
-      let recupIdSupp = addProduit[w].idProduct;
-      let id = article.dataset.id;
-      let
-      addProduit = addProduit.filter((el) => el.idProduct !== recupIdSupp);
-    });
-  }
-}*/
-
 function SuppArticle() {
-  let addProduit = JSON.parse(localStorage.getItem("produitKanap"));
+  // let addProduit = JSON.parse(localStorage.getItem("produitKanap"));
   const buttonDelete = document.querySelectorAll(".deleteItem");
   for (let w = 0; w < buttonDelete.length; w++) {
     buttonDelete[w].addEventListener("click", (event) => {
@@ -100,11 +64,11 @@ function SuppArticle() {
       let color = article.dataset.color;
 
       addProduit = addProduit.filter(
-        (el) => el.id !== id || el.color !== color
+        (el) => el.id !== id && el.color !== color
       );
-      localStorage.setItem("produitKanap", JSON.stringify(addProduit));
+      localStorage.setItem("kanap", JSON.stringify(addProduit));
+      localStorage.removeItem(buttonDelete[w]);
       article.remove();
-      findindex();
     });
   }
 }
@@ -117,16 +81,109 @@ function commanderKanap() {
   btnEnvoie.addEventListener =
     ("click",
     (event) => {
-      let lastname = document.getElementById("lastname");
-      let city = document.getElementById("city");
-      let adresse = document.getElementById("adresse");
-      let email = document.getElementById("email");
-      let firstname = document.getElementById("firstname");
-
-      const textAlert = (valeur) => {
-        return `${valeur}: symboles et chiffres ne sont pas autorisés, maximum 20 caractères`;
+      event.preventDefault();
+      let contact = {
+        lastname: document.getElementById("lastname").value,
+        city: document.getElementById("city").value,
+        adresse: document.getElementById("adresse").value,
+        email: document.getElementById("email").value,
+        firstname: document.getElementById("firstname").value,
       };
 
-      const regexVilleNomPrenom = () => {};
+      const alertValue = (vrb) => {
+        return `${vrb}: symboles et chiffres ne sont pas autorisés, maximum 20 caractères`;
+      };
+      // expressions régulières pour un nom, une ville et un nom de famille utilisant que des caractères
+      let regexCfl = new RegExp("/^[a-zA-Z]{3,20}$/");
+
+      function validFirstName() {
+        if (regexCfl.test(contact.firstname)) {
+          console.log("ok");
+          return true;
+        } else {
+          console.log("ko");
+          alert(alertValue("Prénom"));
+          return false;
+        }
+      }
+
+      function validLastName() {
+        if (regexCfl.test(contact.lastname)) {
+          console.log("ok");
+          return true;
+        } else {
+          console.log("ko");
+          alert(alertValue("nom"));
+          return false;
+        }
+      }
+
+      function validCity() {
+        if (regexCfl.test(contact.city)) {
+          console.log("ok");
+          return true;
+        } else {
+          console.log("ko");
+          alert(alertValue("ville"));
+          return false;
+        }
+      }
+      // expressions régulières pour une addresse email valide
+      let regexEmail = new RegExp(
+        "/^([a-z0-9_.-]+)@([da-z.-]+).([a-z.]{2,6})$/"
+      );
+
+      function validEmail() {
+        if (regexEmail.test(contact.email)) {
+          console.log("ok");
+          return true;
+        } else {
+          console.log("ko");
+          alert("l'email n'est pas valide");
+          return false;
+        }
+      }
+
+      // expressions régulières pour une addresse valide
+      let regexAdresse = new RegExp(
+        "/^[sA-Za-z0-9,.]{5,35}[sA-Za-z0-9]{5,35}$/"
+      );
+
+      function validAdresse() {
+        if (regexAdresse.test(contact.adresse)) {
+          console.log("ok");
+          return true;
+        } else {
+          console.log("ko");
+          alert("l'adresse n'est pas valide");
+          return false;
+        }
+      }
+      let verification = false;
+      if (
+        validFirstName() &&
+        validLastName() &&
+        validCity() &&
+        validAdresse() &&
+        validEmail()
+      ) {
+        localStorage.setItem("contact", JSON.stringify(contact));
+        verification = true;
+      } else {
+        //Pas d'actions nécessaire
+      }
+
+      //Objet contenant les produits et le contact
+      let addProduit = JSON.parse(localStorage.getItem("kanap"));
+
+      let products = [];
+      addProduit.forEach((element) => products.push(element.id));
+
+      const SENDINFOALL = {
+        products,
+        contact,
+      };
+      console.log(SENDINFOALL);
     });
 }
+commanderKanap();

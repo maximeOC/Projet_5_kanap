@@ -1,6 +1,9 @@
 const idProduit = new URL(window.location.href).searchParams.get("id");
 const url2 = `http://localhost:3000/api/products/${idProduit}`;
 let kanapData = "";
+
+// utilisation de la méthode Fetch pour aller chercher des données dans un bdd local
+
 const fetchconst = fetch(url2)
   .then((reponse) => {
     return reponse.json();
@@ -22,6 +25,8 @@ function fetchProduct() {
 }
 
 fetchProduct();
+
+// ajout des différents éléments du kanap dans le html
 
 function getPost(kanapData) {
   let productPrice = document.querySelector("#price");
@@ -65,32 +70,36 @@ btn_ajoutPanier.addEventListener("click", (e) => {
     description: kanapData.description,
   };
   console.log(choixDuClient);
-  // déclaration de variables, JSON.parse permet de convertir des données JSON en format javascript
-  let addProduit = JSON.parse(localStorage.getItem("produitKanap"));
-
-  // envoie des produits dans le localstorage
-  if (addProduit) {
-    addProduit.push(choixDuClient);
-    localStorage.setItem("produitKanap", JSON.stringify(addProduit));
-    console.log(addProduit);
-  } else {
-    addProduit = [];
-    addProduit.push(choixDuClient);
-    localStorage.setItem("produitKanap", JSON.stringify(addProduit));
-
-    console.log(addProduit);
-  }
-
   // une alerte se crée si le client n'a pas choisi de couleur
   if (!color) {
     alert("veuillez ajouter une couleur");
     return;
   }
   // une alerte se crée si le client n'a pas choisi de quantité
-  if (!quantity > 0 && quantity <= 100) {
+  if (quantity > 0 && quantity <= 100 && quantity != 0) {
   } else {
     alert("veuillez ajouter un nombre d'article");
   }
+  // déclaration de variables, JSON.parse permet de convertir des données JSON en format javascript
+  let addProduit = JSON.parse(localStorage.getItem("kanap"));
+  console.log(addProduit);
+  // envoie des produits dans le localstorage
+  if (!addProduit) {
+    addProduit = [];
+    addProduit.push(choixDuClient);
+    // localStorage.setItem("produitKanap", JSON.stringify(addProduit));
+  } else {
+    for (let h = 0; h < addProduit.length; h++) {
+      if (addProduit[h].id == kanapData._id && addProduit[h].color == color) {
+        addProduit[h].quantity += quantity;
+        localStorage.setItem("kanap", JSON.stringify(addProduit));
+        return;
+      }
+    }
+    addProduit.push(choixDuClient);
+  }
+  localStorage.setItem("kanap", JSON.stringify(addProduit));
+
   //ajout du lien pour accéder au panier
   document.querySelector(".item__content__addButton").innerHTML = `
   <a href="../html/cart.html">
