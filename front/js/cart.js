@@ -98,10 +98,8 @@ function commanderKanap() {
 
       function validFirstName() {
         if (regexCfl.test(contact.firstname)) {
-          console.log("ok");
           return true;
         } else {
-          console.log("ko");
           alert(alertValue("Prénom"));
           return false;
         }
@@ -109,10 +107,8 @@ function commanderKanap() {
 
       function validLastName() {
         if (regexCfl.test(contact.lastname)) {
-          console.log("ok");
           return true;
         } else {
-          console.log("ko");
           alert(alertValue("nom"));
           return false;
         }
@@ -120,11 +116,9 @@ function commanderKanap() {
 
       function validCity() {
         if (regexCfl.test(contact.city)) {
-          console.log("ok");
           return true;
         } else {
-          console.log("ko");
-          alert(alertValue("ville"));
+          alert("ville");
           return false;
         }
       }
@@ -135,10 +129,8 @@ function commanderKanap() {
 
       function validEmail() {
         if (regexEmail.test(contact.email)) {
-          console.log("ok");
           return true;
         } else {
-          console.log("ko");
           alert("l'email n'est pas valide");
           return false;
         }
@@ -148,13 +140,11 @@ function commanderKanap() {
       let regexAdresse = new RegExp(
         "/^[sA-Za-z0-9,.]{5,35}[sA-Za-z0-9]{5,35}$/"
       );
-
+      //function pour valider si l'adresse est conforme
       function validAdresse() {
         if (regexAdresse.test(contact.adresse)) {
-          console.log("ok");
           return true;
         } else {
-          console.log("ko");
           alert("l'adresse n'est pas valide");
           return false;
         }
@@ -174,16 +164,16 @@ function commanderKanap() {
       }
 
       //Objet contenant les produits et le contact
-      let addProduit = JSON.parse(localStorage.getItem("kanap"));
+      let addProduit = JSON.parse(localStorage.getItem("contact"));
 
+      // push des éléments
       let products = [];
       addProduit.forEach((element) => products.push(element.id));
 
-      const SENDINFOALL = {
+      const SendInfo = {
         products,
         contact,
       };
-      console.log(SENDINFOALL);
     });
 }
 commanderKanap();
