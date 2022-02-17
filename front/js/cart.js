@@ -81,7 +81,6 @@ function commanderKanap() {
   btnEnvoie.addEventListener =
     ("click",
     (event) => {
-      event.preventDefault();
       let contact = {
         lastname: document.getElementById("lastname").value,
         city: document.getElementById("city").value,
@@ -94,10 +93,10 @@ function commanderKanap() {
         return `${vrb}: symboles et chiffres ne sont pas autorisés, maximum 20 caractères`;
       };
       // expressions régulières pour un nom, une ville et un nom de famille utilisant que des caractères
-      let regexCfl = new RegExp("/^[a-zA-Z]{3,20}$/");
+      let regexCfl = new RegExp("/^[a-zA-Z]{1,20}$/");
 
       function validFirstName() {
-        if (regexCfl.test(contact.firstname)) {
+        if (regexCfl(contact.firstname)) {
           return true;
         } else {
           alert(alertValue("Prénom"));
@@ -106,7 +105,7 @@ function commanderKanap() {
       }
 
       function validLastName() {
-        if (regexCfl.test(contact.lastname)) {
+        if (regexCfl(contact.lastname)) {
           return true;
         } else {
           alert(alertValue("nom"));
@@ -115,7 +114,7 @@ function commanderKanap() {
       }
 
       function validCity() {
-        if (regexCfl.test(contact.city)) {
+        if (regexCfl(contact.city)) {
           return true;
         } else {
           alert("ville");
@@ -128,7 +127,7 @@ function commanderKanap() {
       );
 
       function validEmail() {
-        if (regexEmail.test(contact.email)) {
+        if (regexEmail(contact.email)) {
           return true;
         } else {
           alert("l'email n'est pas valide");
@@ -142,7 +141,7 @@ function commanderKanap() {
       );
       //function pour valider si l'adresse est conforme
       function validAdresse() {
-        if (regexAdresse.test(contact.adresse)) {
+        if (regexAdresse(contact.adresse)) {
           return true;
         } else {
           alert("l'adresse n'est pas valide");
@@ -164,7 +163,7 @@ function commanderKanap() {
       }
 
       //Objet contenant les produits et le contact
-      let addProduit = JSON.parse(localStorage.getItem("contact"));
+      let addProduit = JSON.parse(localStorage.getItem("kanap"));
 
       // push des éléments
       let products = [];
@@ -174,6 +173,25 @@ function commanderKanap() {
         products,
         contact,
       };
+      console.log(SendInfo);
+      let post = {
+        method: "POST",
+        body: JSON.stringify(SendInfo),
+        headers: { "Content-Type": "application/json" },
+      };
+
+      if (verification && products.length > 0) {
+        fetch("http://localhost:3000/api/products", post)
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            let orderId = data.orderId;
+            window.location.href = `../html/confirmation.html?id=${orderId}`;
+            console.log(orderId);
+          });
+      }
     });
+  /*Enregistrer la commande*/
 }
+
 commanderKanap();

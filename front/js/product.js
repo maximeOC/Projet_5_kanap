@@ -1,5 +1,6 @@
-const idProduit = new URL(window.location.href).searchParams.get("id");
-const url2 = `http://localhost:3000/api/products/${idProduit}`;
+const idProduct = new URL(window.location.href).searchParams.get("id");
+const url2 = `http://localhost:3000/api/products/${idProduct}`;
+
 let kanapData = "";
 
 // utilisation de la méthode Fetch pour aller chercher des données dans un bdd local
@@ -16,16 +17,14 @@ const fetchconst = fetch(url2)
     }
   })
 
-  .catch(function (error) {
+  .catch((error) => {
     console.log("erreur de chargement");
   });
 
 function fetchProduct() {
   fetchconst;
 }
-
 fetchProduct();
-
 // ajout des différents éléments du kanap dans le html
 
 function getPost(kanapData) {
@@ -47,7 +46,6 @@ function getPost(kanapData) {
     let kanapColors = document.querySelector("#colors");
     kanapColors.innerHTML += `<option value="${colors}"> ${colors}</option>`;
   }
-  panier(kanapData);
 }
 
 //ajout lien pour la page panier
